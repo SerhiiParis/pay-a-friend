@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Identity.Registration
 {
     public static class Commands

@@ -1,4 +1,3 @@
-using System;
 using Eventuous;
 using static Pay.Identity.Domain.Users.Events;
 

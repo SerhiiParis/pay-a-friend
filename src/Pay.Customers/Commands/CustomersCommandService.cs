@@ -1,4 +1,3 @@
-using System;
 using Eventuous;
 using Pay.Verification.Domain;
 using static Pay.Verification.Commands;

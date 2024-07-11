@@ -1,4 +1,3 @@
-using System;
 using Eventuous;
 
 namespace Pay.Verification.Domain

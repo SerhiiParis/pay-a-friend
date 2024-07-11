@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Pay.Identity.Infrastructure;
 using Pay.Identity.Configs;

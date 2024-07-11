@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Verification.Domain
 {
     public static class Events {

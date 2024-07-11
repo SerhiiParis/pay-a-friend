@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.WebApp.Pages.Start
 {
     public class StartViewModel

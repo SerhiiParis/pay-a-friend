@@ -1,9 +1,6 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Eventuous.Subscriptions;
-using Microsoft.AspNetCore.Mvc;
-
 using static Pay.Prepaid.Reactors.IntegrationEvents;
 using Pay.Prepaid.PrepaidAccounts;
 using Pay.Prepaid.Domain.PrepaidTransactions;

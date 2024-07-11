@@ -1,5 +1,4 @@
 ﻿using System;
-using Eventuous;
 
 namespace Pay.Identity.Domain.Users
 {

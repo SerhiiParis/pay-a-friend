@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Identity.Domain.Users
 {
     public static class Events {

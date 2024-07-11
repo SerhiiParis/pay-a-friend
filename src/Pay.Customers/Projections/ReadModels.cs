@@ -8,8 +8,7 @@ namespace Pay.Verification.Projections
             string CustomerId, 
             bool DetailsSubmitted,
             bool DetailsVerified 
-        ) 
-            : ProjectedDocument(CustomerId)
+        ) : ProjectedDocument(CustomerId)
         {
             public string DateOfBirth { get; init; }
             public string Address { get; init; }

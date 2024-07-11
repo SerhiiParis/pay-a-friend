@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Verification
 {
     public static class Commands

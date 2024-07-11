@@ -1,19 +1,16 @@
-using IdentityModel;
 using IdentityServer4;
-using IdentityServer4.Extensions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using System.Collections.Generic;
 using static Pay.Identity.Projections.ReadModels;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Pay.Identity.Authentication
 {
     public class AuthenticationController: Controller
     {
-        AuthenticationService _service;
+        private readonly AuthenticationService _service;
+
         public AuthenticationController(AuthenticationService service)
         {
             _service = service;
@@ -36,14 +33,14 @@ namespace Pay.Identity.Authentication
             {
                 if (_service.CheckCredentials(model.Email, model.Password, out UserDetails userDetails))
                 {
-                    var isuser = new IdentityServerUser(userDetails.Id)
+                    var isUser = new IdentityServerUser(userDetails.Id)
                     {
                         DisplayName = userDetails.FullName,
                         AdditionalClaims = new Claim[] {
                             new Claim(ClaimTypes.Email, userDetails.Email)
                         }
                     };
-                    await HttpContext.SignInAsync(isuser, null);
+                    await HttpContext.SignInAsync(isUser, null);
                     return Redirect(model.ReturnUrl);
                 }
                 else
@@ -51,7 +48,13 @@ namespace Pay.Identity.Authentication
                     return Unauthorized();
                 }
             }
-            return View(model);
+
+            return View(new LoginViewModel
+            {
+                ReturnUrl = model.ReturnUrl,
+                Email = model.Email,
+                Password = model.Password
+            });
         }
     }
 }

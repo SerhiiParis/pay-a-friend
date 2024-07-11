@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Eventuous;
+﻿using Eventuous;
 using Pay.Prepaid.Domain.PrepaidAccounts;
 using static Pay.Prepaid.Domain.TransferOrders.Events;
 

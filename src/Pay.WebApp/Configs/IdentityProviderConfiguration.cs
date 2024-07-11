@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.WebApp.Configs
 {
     public class IdentityProviderConfiguration

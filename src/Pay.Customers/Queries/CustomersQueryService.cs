@@ -1,20 +1,20 @@
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using Pay.Customers.Projections;
+using Pay.Verification.Projections;
 
 namespace Pay.Customers.Queries
 {
     public class CustomersQueryService
     {
-        IMongoCollection<CustomersDetails> _database;
+        IMongoCollection<ReadModels.CustomerDetails> _database;
         public CustomersQueryService(
             IMongoDatabase database
         )
         {
-            _database = database.GetCollection<CustomersDetails>(typeof(CustomersDetails).Name);
+            _database = database.GetCollection<ReadModels.CustomerDetails>(nameof(ReadModels.CustomerDetails));
         }
 
-        public async Task<CustomersDetails> GetCustomerById(string customerId)
+        public async Task<ReadModels.CustomerDetails> GetCustomerById(string customerId)
         {
             var query = await _database.FindAsync(d => d.Id == customerId);
             return await query.SingleOrDefaultAsync();

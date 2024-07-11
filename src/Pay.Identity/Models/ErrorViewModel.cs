@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Identity.Models
 {
     public class ErrorViewModel

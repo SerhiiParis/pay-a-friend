@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.Identity.Registration
 {
     public class RegisterInputModel
@@ -8,6 +6,5 @@ namespace Pay.Identity.Registration
         public string Email { get; set; }
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
-
     }
 }

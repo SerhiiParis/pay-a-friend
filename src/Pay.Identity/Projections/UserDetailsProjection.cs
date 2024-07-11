@@ -1,9 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using MongoDB.Bson;
-
 using Eventuous.Projections.MongoDB;
 using static Pay.Identity.Projections.ReadModels;
 using static Pay.Identity.Domain.Users.Events;

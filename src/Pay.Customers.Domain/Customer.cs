@@ -1,5 +1,4 @@
-﻿using System;
-using Eventuous;
+﻿using Eventuous;
 using static Pay.Verification.Domain.Events;
 
 namespace Pay.Verification.Domain

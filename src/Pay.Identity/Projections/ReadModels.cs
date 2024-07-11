@@ -1,4 +1,3 @@
-using System;
 using Eventuous.Projections.MongoDB.Tools;
 
 namespace Pay.Identity.Projections

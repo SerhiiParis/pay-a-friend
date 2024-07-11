@@ -1,5 +1,3 @@
-using System;
-
 namespace Pay.WebApp.Models
 {
     public class ErrorViewModel

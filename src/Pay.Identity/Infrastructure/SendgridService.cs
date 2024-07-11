@@ -2,8 +2,6 @@ using System;
 using System.Net;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.Web;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using FluentResults;

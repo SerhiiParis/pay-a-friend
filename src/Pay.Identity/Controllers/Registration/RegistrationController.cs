@@ -41,7 +41,13 @@ namespace Pay.Identity.Registration
                 await _service.Handle(command, default);
                 return Redirect(model.ReturnUrl);
             }
-            return View(model);
+            return View(new RegisterViewModel
+            {
+                FullName = model.FullName,
+                Email = model.Email,
+                Password = model.Password,
+                ReturnUrl = model.ReturnUrl
+            });
         }
 
         [HttpGet]
