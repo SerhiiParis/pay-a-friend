@@ -5,43 +5,43 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-
 using static Pay.WebApp.Commands;
 using System.Text.Json;
 using System.Text;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Extensions.Options;
 using System.Net;
-
+using Pay.Shared.Extensions;
 using Pay.WebApp.Configs;
 
 namespace Pay.WebApp
 {
     public class VerificationService
     {
-        readonly IHttpClientFactory _httpClientFactory;
-        private readonly IOptions<ApiConfiguration> _apiConfig;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly VerificationApiConfiguration _apiConfig;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public VerificationService(
-            IOptions<ApiConfiguration> apiConfig,
+            IOptions<VerificationApiConfiguration> apiConfig,
+            IHttpContextAccessor httpContextAccessor,
             IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _apiConfig = apiConfig;
+            _apiConfig = apiConfig.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
+        // todo: split into smaller methods: one method for each API call
         public async Task SendVerificationDetails(VerificationModel model)
         {
-            var context = new HttpContextAccessor().HttpContext;
-            var accessToken = await context.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-            var customerId = context.User.Claims.Where( claim => claim.Type == "sub").FirstOrDefault().Value;
-
+            var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var customerId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
 
             var httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             // create the draft
-
             var detailsId = Guid.NewGuid().ToString();
 
             var draftCommand = new CreateDraftVerificationDetails {
@@ -54,12 +54,12 @@ namespace Pay.WebApp
                 "application/json"
             );
 
-            var response = await httpClient.PostAsync("/api/verify/draft", draftCommandJson);
+            var response = await httpClient.PostAsync(_apiConfig.Url.Combine(_apiConfig.DraftRoute), draftCommandJson);
 
+            // todo: refactor to use proper type of exception + exception middleware; add logs; check all other throws;
             if (response.StatusCode != HttpStatusCode.OK) throw new Exception($"{response.StatusCode} {response.ReasonPhrase}");
 
             // add date of birth
-
             var dobCommand = new AddDateOfBirth {
                 VerificationDetailsId = detailsId,
                 DateOfBirth = model.DateOfBirth
@@ -69,11 +69,10 @@ namespace Pay.WebApp
                 Encoding.UTF8,
                 "application/json"
             );
-            response = await httpClient.PostAsync("/api/verify/dob", dobCommandJson);
+            response = await httpClient.PostAsync(_apiConfig.Url.Combine(_apiConfig.DobRoute), dobCommandJson);
             if (response.StatusCode != HttpStatusCode.OK) throw new Exception($"{response.StatusCode} {response.ReasonPhrase}");
 
             // add the address
-
             var addressCommand = new AddAddress {
                 VerificationDetailsId = detailsId,
                 Address1 = model.Address1,
@@ -88,11 +87,10 @@ namespace Pay.WebApp
                 Encoding.UTF8,
                 "application/json"
             );
-            response = await httpClient.PostAsync("/api/verify/address", addressCommandJson);
+            response = await httpClient.PostAsync(_apiConfig.Url.Combine(_apiConfig.AddressRoute), addressCommandJson);
             if (response.StatusCode != HttpStatusCode.OK) throw new Exception($"{response.StatusCode} {response.ReasonPhrase}");
 
             // submit the details
-
             var submitCommand = new SubmitDetails {
                 VerificationDetailsId = detailsId
             };
@@ -101,9 +99,8 @@ namespace Pay.WebApp
                 Encoding.UTF8,
                 "application/json"
             );
-            response = await httpClient.PostAsync("/api/verify/submit", submitCommandJson);
+            response = await httpClient.PostAsync(_apiConfig.Url.Combine(_apiConfig.SubmitRoute), submitCommandJson);
             if (response.StatusCode != HttpStatusCode.OK) throw new Exception($"{response.StatusCode} {response.ReasonPhrase}");
-
         }
     }
 }

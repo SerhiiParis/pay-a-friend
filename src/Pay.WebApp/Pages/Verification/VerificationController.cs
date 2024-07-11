@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Pay.WebApp
 {
     public class VerificationController : Controller
     {
-        VerificationService _service; 
+        private readonly VerificationService _service; 
+
         public VerificationController(VerificationService service) => _service = service;
 
         [HttpGet]

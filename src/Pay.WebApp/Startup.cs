@@ -28,12 +28,14 @@ namespace Pay.WebApp
 
             services
                 .Configure<IdentityProviderConfiguration>(Configuration.GetSection("IdentityConfig"))
-                .Configure<ApiConfiguration>(Configuration.GetSection("ApiConfig"))
+                .Configure<VerificationApiConfiguration>(Configuration.GetSection("VerificationApi"))
                 .Configure<LocalUrls>(Configuration.GetSection("LocalUrls"))
                 .AddCustomAuthentication()
                 .AddCustomServices()
                 .AddHttpContextAccessor()
             ;
+
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

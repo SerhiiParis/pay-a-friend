@@ -11,30 +11,33 @@ using Pay.Identity.Domain.Emails;
 
 namespace Pay.Identity.Infrastructure
 {
+    // todo: send emails only if enabled in appsettings
     public class SendGridService : ISendEmailService
     {
-        private SendgridConfiguration _sendgridConfig;
-        private ReferenceUrls _referenceUrls;
+        private readonly SendgridConfiguration _sendgridConfig;
+        private readonly ReferenceUrls _referenceUrls;
+
         public SendGridService(
             IOptions<SendgridConfiguration> sendgridConfig,
             IOptions<ReferenceUrls> referenceUrls
         )
         {
-            if (string.IsNullOrWhiteSpace(sendgridConfig.Value.ApiKey))
-                throw new ArgumentNullException(nameof(sendgridConfig.Value.ApiKey));
-
-            if (string.IsNullOrWhiteSpace(sendgridConfig.Value.SenderEmail))
-                throw new ArgumentNullException(nameof(sendgridConfig.Value.SenderEmail));
-
-            if (string.IsNullOrWhiteSpace(sendgridConfig.Value.SenderName))
-                throw new ArgumentNullException(nameof(sendgridConfig.Value.SenderName));
-
-            if (string.IsNullOrWhiteSpace(referenceUrls.Value.BaseUrl))
-                throw new ArgumentNullException(nameof(referenceUrls.Value.BaseUrl));
+            // if (string.IsNullOrWhiteSpace(sendgridConfig.Value.ApiKey))
+            //     throw new ArgumentNullException(nameof(sendgridConfig.Value.ApiKey));
+            //
+            // if (string.IsNullOrWhiteSpace(sendgridConfig.Value.SenderEmail))
+            //     throw new ArgumentNullException(nameof(sendgridConfig.Value.SenderEmail));
+            //
+            // if (string.IsNullOrWhiteSpace(sendgridConfig.Value.SenderName))
+            //     throw new ArgumentNullException(nameof(sendgridConfig.Value.SenderName));
+            //
+            // if (string.IsNullOrWhiteSpace(referenceUrls.Value.BaseUrl))
+            //     throw new ArgumentNullException(nameof(referenceUrls.Value.BaseUrl));
 
             _sendgridConfig = sendgridConfig.Value;
             _referenceUrls = referenceUrls.Value;
         }
+
         public async Task<Result> SendEmailConfirmationEmail(
             string userId,
             string recipientEmail, 
@@ -52,6 +55,9 @@ namespace Pay.Identity.Infrastructure
             if (result.IsFailed)
                 return result;
 
+            return Result.Ok();
+
+            // todo: refactor. 1) move out strings to constants; 2) move to private method;
             var client = new SendGridClient(_sendgridConfig.ApiKey);
             var from = new EmailAddress(_sendgridConfig.SenderEmail, _sendgridConfig.SenderName);
             var subject = "Email Confirmation";

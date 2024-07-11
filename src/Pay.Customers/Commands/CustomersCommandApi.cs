@@ -6,7 +6,7 @@ using static Pay.Verification.Commands.V1;
 namespace Pay.Verification
 {
     [ApiController]
-    [Route("api/customer")]
+    [Route("api/customer")]  // todo: rename to customers
     [Authorize]
     public class CustomersController : ControllerBase
     {
